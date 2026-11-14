@@ -1,0 +1,64 @@
+    1  groupadd students
+    2  useradd -u 1234 -g students -m user1
+    3  passwd user1
+    4  chage -M 90 user1
+    5  id user1
+    6  chage -l user1
+    7  ls -ld /home/user1
+    8  find / -type f -perm -4000 2>/dev/null
+    9  find / -type -perm -4000 2>/dev/null > /root/setuid-files.out
+   10  cat /root/setuid-files.out
+   11  ps -eo pid,ruid,euid,user,comm
+   12  ps -eo pid,ruid,euid,user,comm | awk 'NR==1 || ($2>=1000 && $2!=0 && $3==0)'
+   13  ps -ef | grep '[p]asswd'
+   14  ps -eo pid,ruid,euid,user,comm | awk 'NR==1 || ($2>=1000 && $2!=0 && $3==0)'
+   15  exit
+   16  ps -eo pid,ruid,euid,user,comm | awk 'NR==1 || ($2>=1000 && $2!=0 && $3==0)'
+   17  ps -eo pid,ruid,euid,user,comm | awk 'NR==1 || ($2>=1000 && $2!=0 && $3==0)' > /root/processes.out
+   18  find / -type f -perm -4000 2>/dev/null > /root/setuid-files.out
+   19  ls -l /root/setuid-files.out /root/processes.out
+   20  cat /root/setuid-files.out
+   21  cat /root/processes.out
+   22  mkdir -p /var/lib/mephi-security-test
+   23  chmod 700 /var/lib/mephi-security-test
+   24  echo "MEPHI SETUID TEST SUCCESS" > /var/lib/mephi-security-test/secret.txt
+   25  chmod 600 /var/lib/mephi-security-test/secret.txt
+   26  ls -l /var/lib/mephi-security-test/secret.txt
+   27  runuser -u user1 -- cat /var/lib/mephi-security-test/secret.txt
+   28  mkdir -p /home/user1/mephi-tools
+   29  cp /usr/bin/cat /home/user1/mephi-tools/cat-suid
+   30  chown root:root /home/user1/mephi-tools/cat-suid
+   31  chmod 4755 /home/user1/mephi-tools/cat-suid
+   32  ls -l /home/user1/mephi-tools/cat-suid
+   33  runuser -u user1 -- /home/user1/mephi-tools/cat-suid /var/lib/mephi-security-test/secret.txt
+   34  stat /home/user1/mephi-tools/cat-suid > /root/setuid-stat.out
+   35  cat /root/setuid-stat.out
+   36  mkdir -p /var/tmp/mephi-chown-test
+   37  chmod 755 /var/tmp/mephi-chown-test
+   38  touch /var/tmp/mephi-chown-test/test.txt
+   39  chown root:root /var/tmp/mephi-chown-test/test.txt
+   40  chmod 644 /var/tmp/mephi-chown-test/test.txt
+   41  ls -l /var/tmp/mephi-chown-test/test.txt
+   42  runuser -u user1 -- chown user1 /var/tmp/mephi-chown-test/test.txt
+   43  cp /usr/bin/chown /home/user1/mephi-tools/chown-cap
+   44  chown root:root /home/user1/mephi-tools/chown-cap
+   45  setcap cap_chown=ep /home/user1/mephi-tools/chown-cap
+   46  getcap /home/user1/mephi-tools/chown-cap
+   47  /home/user1/mephi-tools/chown-cap cap_chown=ep
+   48  rpm -q libcap
+   49  runuser -u user1 -- /home/user1/mephi-tools/chown-cap user1 /var/tmp/mephi-chown-test/test.txt
+   50  ls -l /var/tmp/mephi-chown-test/test.txt
+   51  getcap /home/user1/mephi-tools/chown-cap > /root/getcap.out
+   52  stat /home/user1/mephi-tools/chown-cap > /root/cap-stat.out
+   53  command -v timedatectl
+   54  visudo -f /etc/sudoers.d/user1-time
+   55  chmod 440 /etc/sudoers.d/user1-time
+   56  visudo -c
+   57  sudo -l -U user1
+   58  timedatectl status
+   59  timedatectl set-ntp false
+   60  su - user1
+   61  timedatectl set-ntp true
+   62  sudo -l -U user1 > /root/sudo-check.out
+   63  echo "265299"
+   64  history > ~/history.out

@@ -1,0 +1,5 @@
+    PID  RUID  EUID USER     COMMAND
+   1773  1000     0 root     sudo
+   1775  1000     0 root     sudo
+   1891  1000     0 root     su
+   1936  1234     0 root     passwd
